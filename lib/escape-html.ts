@@ -1,9 +1,12 @@
-export function escapeHtml(rawString: string): string {
-  return rawString
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#x27;")
-    .replace(/`/g, "&#x60;");
+const map = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#x27;",
+  "`": "&#x60;",
+} as const;
+
+export function escapeHtml(unescaped: string): string {
+  return unescaped.replace(/[&<>"'`]/g, (c) => map[c as keyof typeof map]);
 }

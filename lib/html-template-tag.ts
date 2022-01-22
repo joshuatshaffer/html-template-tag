@@ -1,11 +1,6 @@
 import { escapeHtml } from "./escape-html";
-import { format } from "prettier";
 
-export interface ToHtml {
-  toHtml: () => string;
-}
-
-export class HtmlThing implements ToHtml {
+class HtmlThing {
   constructor(private readonly content: string) {}
 
   toString() {
@@ -17,23 +12,43 @@ export class HtmlThing implements ToHtml {
   }
 
   toHtmlDoc() {
-    return format("<!DOCTYPE html>\n" + this.content, { parser: "html" });
+    return "<!DOCTYPE html>\n" + this.content;
   }
 }
 
-export function hasToHtml(value: unknown): value is ToHtml {
-  return typeof (value as ToHtml)?.toHtml === "function";
-}
+type Interpolation =
+  | boolean
+  | null
+  | undefined
+  | { toHtml(): string }
+  | { toString(): string }
+  | readonly Interpolation[]
+  | (() => Interpolation);
 
-function toHtml(value: unknown): string {
-  if (hasToHtml(value)) return value.toHtml();
+function toHtml(value: Interpolation): string {
+  if (value === null || value === undefined || typeof value === "boolean") {
+    return "";
+  }
 
-  if (Array.isArray(value)) return value.map(toHtml).join("");
+  if ("toHtml" in value) {
+    return value.toHtml();
+  }
+
+  if (typeof value === "function") {
+    return toHtml(value());
+  }
+
+  if (value instanceof Array) {
+    return value.map(toHtml).join("");
+  }
 
   return escapeHtml("" + value);
 }
 
-export function html(strings: TemplateStringsArray, ...values: unknown[]) {
+export function html(
+  strings: TemplateStringsArray,
+  ...values: Interpolation[]
+) {
   let output = strings[0];
 
   for (let i = 1; i < strings.length; ++i) {
@@ -45,6 +60,13 @@ export function html(strings: TemplateStringsArray, ...values: unknown[]) {
   return new HtmlThing(output);
 }
 
-html.join = function htmlJoin(array: unknown[], separator: unknown = "") {
+html.join = function htmlJoin(
+  array: Interpolation[],
+  separator: Interpolation = ""
+) {
   return new HtmlThing(array.map(toHtml).join(toHtml(separator)));
+};
+
+html.raw = function htmlRaw(content: string | { toString(): string }) {
+  return new HtmlThing("" + content);
 };

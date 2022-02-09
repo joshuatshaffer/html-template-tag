@@ -6,15 +6,15 @@ class CssThing {
   }
 }
 
-type Interpolation =
+export type CssInterpolation =
   | boolean
   | null
   | undefined
   | { toString(): string }
-  | readonly Interpolation[]
-  | (() => Interpolation);
+  | readonly CssInterpolation[]
+  | (() => CssInterpolation);
 
-function toCss(value: Interpolation): string {
+function toCss(value: CssInterpolation): string {
   if (value === null || value === undefined || typeof value === "boolean") {
     return "";
   }
@@ -30,7 +30,10 @@ function toCss(value: Interpolation): string {
   return "" + value;
 }
 
-export function css(strings: TemplateStringsArray, ...values: Interpolation[]) {
+export function css(
+  strings: TemplateStringsArray,
+  ...values: CssInterpolation[]
+) {
   let output = strings[0];
 
   for (let i = 1; i < strings.length; ++i) {

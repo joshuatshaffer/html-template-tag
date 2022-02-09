@@ -16,16 +16,16 @@ class HtmlThing {
   }
 }
 
-type Interpolation =
+type HtmlInterpolation =
   | boolean
   | null
   | undefined
   | { toHtml(): string }
   | { toString(): string }
-  | readonly Interpolation[]
-  | (() => Interpolation);
+  | readonly HtmlInterpolation[]
+  | (() => HtmlInterpolation);
 
-function toHtml(value: Interpolation): string {
+function toHtml(value: HtmlInterpolation): string {
   if (value === null || value === undefined || typeof value === "boolean") {
     return "";
   }
@@ -47,7 +47,7 @@ function toHtml(value: Interpolation): string {
 
 export function html(
   strings: TemplateStringsArray,
-  ...values: Interpolation[]
+  ...values: HtmlInterpolation[]
 ) {
   let output = strings[0];
 
@@ -61,8 +61,8 @@ export function html(
 }
 
 html.join = function htmlJoin(
-  array: Interpolation[],
-  separator: Interpolation = ""
+  array: HtmlInterpolation[],
+  separator: HtmlInterpolation = ""
 ) {
   return new HtmlThing(array.map(toHtml).join(toHtml(separator)));
 };

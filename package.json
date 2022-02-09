@@ -1,6 +1,25 @@
 {
+  "name": "@joshuatshaffer/html-template-tag",
+  "description": "Simple utility for generating safe HTML.",
+  "version": "0.0.0",
+  "license": "MIT",
+  "author": {
+    "name": "Joshua Shaffer",
+    "email": "joshua@joshuatshaffer.com",
+    "url": "https://joshuatshaffer.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joshuatshaffer/html-template-tag.git"
+  },
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "files": [
+    "build"
+  ],
   "scripts": {
-    "test": "mocha --require ts-node/register --recursive './lib/*.spec.ts'"
+    "build": "tsc",
+    "test": "mocha --require ts-node/register --recursive './src/*.spec.ts'"
   },
   "devDependencies": {
     "@types/mocha": "^9.1.0",

@@ -16,7 +16,7 @@ class HtmlThing {
   }
 }
 
-type HtmlInterpolation =
+export type HtmlInterpolation =
   | boolean
   | null
   | undefined

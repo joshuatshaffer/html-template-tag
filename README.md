@@ -32,35 +32,18 @@ html`<div style="${style}">Red text in a box.</div>`;
 Supports nested templates and higher order templates.
 
 ```ts
-import {
-  html,
-  css,
-  HtmlInterpolation as Hi,
-  CssInterpolation as Ci,
-} from "./src";
+const color = (c, x) => html`<div style="color: ${c}">${x}</div>`;
 
-const color = (c: Ci, x: Hi) => {
-  const s = css`
-    color: ${c};
-  `;
-
-  return html`<div style="${s}">${x}</div>`;
-};
-
-const red = (x: Hi) => color("red", x);
-const blue = (x: Hi) => color("blue", x);
-const one = (x: Hi) => html`<div>${x}</div>`;
-const two = (x: Hi) => html`<div>${x} ${x}</div>`;
+const red = (x) => color("red", x);
+const blue = (x) => color("blue", x);
+const one = (x) => html`<div>${x}</div>`;
+const two = (x) => html`<div>${x} ${x}</div>`;
 
 const fish = "<º)))><";
 
-const style = css`
-  border: 1px solid;
-  padding: 1rem;
-  width: max-content;
-`;
-
-const seuss = html`
-  <div style="${style}">${[one(fish), two(fish), red(fish), blue(fish)]}</div>
+output = html`
+  <div style="background: lightblue">
+    ${[one(fish), two(fish), red(fish), blue(fish)]}
+  </div>
 `;
 ```

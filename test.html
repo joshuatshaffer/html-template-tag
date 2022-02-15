@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head> </head>
+  <body>
+    Test
+    <textarea id="input"></textarea>
+    <iframe id="target"></iframe>
+    <script>
+      document.getElementById("input").addEventListener("input", (event) => {
+        console.log("lskjdf");
+        document.getElementById("target").srcdoc =
+          `<!DOCTYPE html>
+<html>
+  <head>
+    <script src="browser/html-template-tag.js"></scr` +
+          `ipt>
+  </head>
+  <body>
+    <div id="output"></div>
+<script>
+  const html = htmlTemplateTag.html;
+  let output = html('');
+  ${event.target.value}
+  document.getElementById("output").innerHTML = output.toString();
+  </scr` +
+          `ipt>
+  </body>
+</html>
+`;
+      });
+    </script>
+  </body>
+</html>

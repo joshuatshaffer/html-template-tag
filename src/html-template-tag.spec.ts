@@ -53,4 +53,22 @@ describe("html", () => {
       )
     );
   });
+
+  it("uses values' custom toHtml methods and does not escape the result", () => {
+    fc.assert(
+      fc.property(fc.string(), (string) => {
+        const value = { toHtml: () => string };
+
+        expect(html`${value}`.toHtml()).to.equal(string);
+      })
+    );
+  });
+
+  it("if a value is both a function and has an toHtml prop, the toHtml prop is used", () => {
+    const foo = () => "function result";
+
+    foo.toHtml = () => "to html result";
+
+    expect(html`${foo}`.toHtml()).to.equal("to html result");
+  });
 });

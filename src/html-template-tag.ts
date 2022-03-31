@@ -30,7 +30,10 @@ function toHtml(value: HtmlInterpolation): string {
     return "";
   }
 
-  if (typeof value === "object" && "toHtml" in value) {
+  if (
+    (typeof value === "object" || typeof value === "function") &&
+    "toHtml" in value
+  ) {
     return value.toHtml();
   }
 

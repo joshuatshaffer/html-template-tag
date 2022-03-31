@@ -1,7 +1,24 @@
 import { expect } from "chai";
 import * as fc from "fast-check";
 import { escapeHtml } from "./escape-html";
-import { html, HtmlInterpolation, ToHtml, toHtml } from "./html-template-tag";
+import {
+  html,
+  HtmlInterpolation,
+  implementsToHtml,
+  ToHtml,
+  toHtml,
+} from "./html-template-tag";
+
+describe("ToHtml", () => {
+  it("implementsToHtml returns true or false and does not throw", () => {
+    fc.assert(
+      fc.property(fc.anything(), (value) => {
+        expect(implementsToHtml(value)).to.be.a("boolean");
+      }),
+      { examples: [[null]] }
+    );
+  });
+});
 
 function arbHtmlInterpolation() {
   return fc.anything() as fc.Arbitrary<HtmlInterpolation>;

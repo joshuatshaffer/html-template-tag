@@ -7,10 +7,7 @@ export interface ToHtml {
 }
 
 export function implementsToHtml<T>(value: T): value is T & ToHtml {
-  return (
-    (typeof value === "object" || typeof value === "function") &&
-    toHtml in value
-  );
+  return typeof (value as any)?.[toHtml] === "function";
 }
 
 class HtmlThing implements ToHtml {

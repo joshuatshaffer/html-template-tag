@@ -1,24 +1,8 @@
 import { expect } from "chai";
 import * as fc from "fast-check";
 import { escapeHtml } from "./escape-html";
-import {
-  html,
-  HtmlInterpolation,
-  implementsToHtml,
-  ToHtml,
-  toHtml,
-} from "./html-template-tag";
-
-describe("ToHtml", () => {
-  it("implementsToHtml returns true or false and does not throw", () => {
-    fc.assert(
-      fc.property(fc.anything(), (value) => {
-        expect(implementsToHtml(value)).to.be.a("boolean");
-      }),
-      { examples: [[null]] }
-    );
-  });
-});
+import { html, HtmlInterpolation } from "./html-template-tag";
+import { ToHtml, toHtml } from "./to-html";
 
 function arbHtmlInterpolation() {
   return fc.anything() as fc.Arbitrary<HtmlInterpolation>;
@@ -79,13 +63,5 @@ describe("html", () => {
         expect(html`${value}`.toString()).to.equal(string);
       })
     );
-  });
-
-  it("if a value is both a function and has an toHtml prop, the toHtml prop is used", () => {
-    const foo = (() => "function result") as (() => string) & ToHtml;
-
-    foo[toHtml] = () => "to html result";
-
-    expect(html`${foo}`.toString()).to.equal("to html result");
   });
 });

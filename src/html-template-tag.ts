@@ -16,14 +16,14 @@ function handleInterpolation(value: HtmlInterpolation): string {
   }
 
   if (implementsToHtml(value)) {
-    return value[toHtml]();
+    return value[toHtml]().toString();
   }
 
   if (value instanceof Array) {
     return value.map(handleInterpolation).join("");
   }
 
-  return escapeHtml("" + value);
+  return escapeHtml(value.toString());
 }
 
 export function html(

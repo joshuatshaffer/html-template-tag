@@ -1,7 +1,9 @@
+import type { HtmlFragment } from "./html-fragment";
+
 export const toHtml = Symbol("toHtml");
 
 export interface ToHtml {
-  [toHtml]: () => string;
+  [toHtml]: () => string | HtmlFragment;
 }
 
 export function implementsToHtml<T>(value: T): value is T & ToHtml {

@@ -7,6 +7,7 @@ const map = {
   "`": "&#x60;",
 } as const;
 
+/** Replace potentially troublesome characters with their HTML character entities. */
 export function escapeHtml(unescaped: string): string {
   return unescaped.replace(/[&<>"'`]/g, (c) => map[c as keyof typeof map]);
 }

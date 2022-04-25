@@ -2,65 +2,65 @@
 
 Simple utility for generating safe HTML.
 
-Automatically escapes strings.
+Automatically escapes strings which helps prevent code injection.
 
 ```ts
 html`<h1>${"Family & Friends"}</h1>`.toString();
-// returns: <h1>Family &amp; Friends</h1>
 ```
 
-Prevents code injection.
+Result:
 
-```ts
-html`
-  <p>${'Maniacal laugher. <script src="evil.js"></script>'}</p>
-`.toString();
-// returns: <p>Maniacal laugher. &lt;script src=&quot;evil.js&quot;&gt;&lt;/script&gt;</p>`
+```html
+<h1>Family &amp; Friends</h1>
 ```
 
-Use inline styles with the css helper.
+Renders `null` and `undefined` as empty strings.
 
 ```ts
-const style = css`
-  color: red;
-  border: 1px solid black;
-`;
-
-html`<div style="${style}">Red text in a box.</div>`;
+html`<h1>${null}</h1>`.toString();
 ```
 
-Supports nested templates and higher order templates.
+Result:
+
+```html
+<h1></h1>
+```
 
 ```ts
-import {
-  html,
-  css,
-  HtmlInterpolation as Hi,
-  CssInterpolation as Ci,
-} from "./src";
+html`<h1>${undefined}</h1>`.toString();
+```
 
-const color = (c: Ci, x: Hi) => {
-  const s = css`
-    color: ${c};
-  `;
+Result:
 
-  return html`<div style="${s}">${x}</div>`;
-};
+```html
+<h1></h1>
+```
 
-const red = (x: Hi) => color("red", x);
-const blue = (x: Hi) => color("blue", x);
-const one = (x: Hi) => html`<div>${x}</div>`;
-const two = (x: Hi) => html`<div>${x} ${x}</div>`;
+Renders arrays by rendering each of their elements. This also works on deep arrays.
 
-const fish = "<º)))><";
+```ts
+html`<h1>${["zero", 1, 2, null, ["a", "b"], "Last"]}</h1>`.toString();
+```
 
-const style = css`
-  border: 1px solid;
-  padding: 1rem;
-  width: max-content;
-`;
+Result:
 
-const seuss = html`
-  <div style="${style}">${[one(fish), two(fish), red(fish), blue(fish)]}</div>
-`;
+```html
+<h1>zero12abLast</h1>
+```
+
+The result of an HTML template can be used in another HTML template.
+
+```ts
+// This will be escaped because it's a string.
+const who = "me & the boys";
+// However, this will not be escaped because it uses the html template tag.
+const what = html`looking for <strong>beans</strong>`;
+
+html`<p>${who} at 2am ${what}</p>`.toString();
+```
+
+Result:
+
+```html
+<p>me &amp; the boys at 2am looking for <strong>beans</strong></p>
 ```

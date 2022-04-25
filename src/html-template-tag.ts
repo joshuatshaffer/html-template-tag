@@ -25,6 +25,7 @@ function handleInterpolation(value: HtmlInterpolation): string {
   return escapeHtml(value.toString());
 }
 
+/** Template literal tag for building HTML documents. */
 export function html(
   strings: TemplateStringsArray,
   ...values: HtmlInterpolation[]
@@ -38,6 +39,7 @@ export function html(
   return new HtmlFragment(output);
 }
 
+/** Like {@link Array.join}, but with {@link HtmlFragment}s instead of strings. */
 html.join = function joinHtml(
   array: readonly HtmlInterpolation[],
   separator: HtmlInterpolation = ""
@@ -47,6 +49,7 @@ html.join = function joinHtml(
   );
 };
 
+/** Convert a string to an {@link HtmlFragment} without escaping. */
 html.raw = function rawHtml(content: string) {
   return new HtmlFragment(content);
 };

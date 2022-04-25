@@ -8,7 +8,7 @@ export type HtmlInterpolation =
   | undefined
   | ToHtml
   | readonly HtmlInterpolation[]
-  | { toString(): string };
+  | { readonly toString: () => string };
 
 function handleInterpolation(value: HtmlInterpolation): string {
   if (value === null || value === undefined || typeof value === "boolean") {

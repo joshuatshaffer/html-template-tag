@@ -3,7 +3,6 @@ import { HtmlFragment } from "./html-fragment";
 import { implementsToHtml, toHtml, ToHtml } from "./to-html";
 
 export type HtmlInterpolation =
-  | boolean
   | null
   | undefined
   | ToHtml
@@ -11,7 +10,7 @@ export type HtmlInterpolation =
   | { readonly toString: () => string };
 
 function handleInterpolation(value: HtmlInterpolation): string {
-  if (value === null || value === undefined || typeof value === "boolean") {
+  if (value === null || value === undefined) {
     return "";
   }
 

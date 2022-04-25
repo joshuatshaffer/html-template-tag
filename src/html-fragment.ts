@@ -13,8 +13,4 @@ export class HtmlFragment implements ToHtml {
   [toHtml]() {
     return this;
   }
-
-  toHtmlDoc() {
-    return "<!DOCTYPE html>\n" + this.content;
-  }
 }

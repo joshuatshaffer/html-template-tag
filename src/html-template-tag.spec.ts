@@ -9,10 +9,18 @@ function arbHtmlInterpolation() {
 }
 
 describe("html", () => {
-  [null, undefined, false, true].map((x) => {
+  [null, undefined].map((x) => {
     it(`renders ${x} as empty string`, () => {
       expect(html`${x}`.toString()).to.equal("");
     });
+  });
+
+  it(`renders boolean true as string "true"`, () => {
+    expect(html`${true}`.toString()).to.equal("true");
+  });
+
+  it(`renders boolean false as string "false"`, () => {
+    expect(html`${false}`.toString()).to.equal("false");
   });
 
   it("escapes strings", () => {

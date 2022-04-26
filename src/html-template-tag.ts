@@ -39,17 +39,21 @@ export function html(
   return new HtmlFragment(output);
 }
 
-/** Like {@link Array.join}, but with {@link HtmlFragment}s instead of strings. */
-html.join = function joinHtml(
-  array: readonly HtmlInterpolation[],
-  separator: HtmlInterpolation = ""
-) {
-  return new HtmlFragment(
-    array.map(handleInterpolation).join(handleInterpolation(separator))
-  );
-};
+// Using a namespace instead of assigning properties to the html
+// function so that doc comments are preserved in the .d.ts output.
+export namespace html {
+  /** Like {@link Array.join}, but with {@link HtmlFragment}s instead of strings. */
+  export function join(
+    array: readonly HtmlInterpolation[],
+    separator: HtmlInterpolation = ""
+  ) {
+    return new HtmlFragment(
+      array.map(handleInterpolation).join(handleInterpolation(separator))
+    );
+  }
 
-/** Convert a string to an {@link HtmlFragment} without escaping. */
-html.raw = function rawHtml(content: string) {
-  return new HtmlFragment(content);
-};
+  /** Convert a string to an {@link HtmlFragment} without escaping. */
+  export function raw(content: string) {
+    return new HtmlFragment(content);
+  }
+}

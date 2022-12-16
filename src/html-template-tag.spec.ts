@@ -1,7 +1,8 @@
 import { expect } from "chai";
 import * as fc from "fast-check";
 import { escapeHtml } from "./escape-html";
-import { html, HtmlInterpolation } from "./html-template-tag";
+import { HtmlInterpolation } from "./html-interpolation";
+import { html } from "./html-template-tag";
 import { ToHtml, toHtml } from "./to-html";
 
 function arbHtmlInterpolation() {

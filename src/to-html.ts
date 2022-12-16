@@ -1,7 +1,7 @@
 import type { HtmlFragment } from "./html-fragment";
 
 /**
- * Symbol for implementing {@link ToHtml} interface.
+ * Symbol for implementing the {@link ToHtml} interface.
  */
 export const toHtml = Symbol("toHtml");
 
@@ -33,6 +33,6 @@ export interface ToHtml {
 /**
  * Returns `true` if `value` defines its own HTML rendering.
  */
-export function implementsToHtml<T>(value: T): value is T & ToHtml {
+export function implementsToHtml(value: unknown): value is ToHtml {
   return typeof (value as any)?.[toHtml] === "function";
 }

@@ -12,13 +12,15 @@
     "type": "git",
     "url": "https://github.com/joshuatshaffer/html-template-tag.git"
   },
-  "main": "./build/index.js",
-  "types": "./build/index.d.ts",
   "files": [
-    "build"
+    "dist"
   ],
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --build",
+    "clean": "tsc --build --clean",
     "test": "mocha --require ts-node/register --recursive './src/*.spec.ts'"
   },
   "devDependencies": {

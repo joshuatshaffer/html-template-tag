@@ -1,12 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es2016",
-    "module": "commonjs",
+    "strict": true,
+
+    "target": "ES6",
+    "module": "CommonJS",
+
+    "outDir": "./dist",
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true,
-    "outDir": "./build",
-    "strict": true
+    "sourceMap": true
   },
   "include": ["src/**/*.ts"],
   "exclude": ["**/*.spec.ts"]

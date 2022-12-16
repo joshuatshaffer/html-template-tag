@@ -1,14 +1,51 @@
 import { expect } from "chai";
-import * as fc from "fast-check";
-import { implementsToHtml } from "./to-html";
+import { HtmlFragment } from "./html-fragment";
+import { implementsToHtml, toHtml } from "./to-html";
+import { inspect } from "util";
 
-describe("ToHtml", () => {
-  it("implementsToHtml returns true or false and does not throw", () => {
-    fc.assert(
-      fc.property(fc.anything(), (value) => {
-        expect(implementsToHtml(value)).to.be.a("boolean");
-      }),
-      { examples: [[null]] }
-    );
+describe("implementsToHtml", () => {
+  describe("returns true for", () => {
+    for (const x of [
+      { [toHtml]: () => "" },
+      {
+        [toHtml]() {
+          return "";
+        },
+      },
+      {
+        get [toHtml]() {
+          return () => "";
+        },
+      },
+      new HtmlFragment(""),
+    ]) {
+      it(inspect(x), () => {
+        expect(implementsToHtml(x)).to.be.true;
+      });
+    }
+  });
+
+  describe("returns false for", () => {
+    for (const x of [
+      null,
+      undefined,
+      Infinity,
+      NaN,
+      0,
+      1,
+      -1,
+      true,
+      false,
+      "",
+      "test",
+      [],
+      { toHtml: () => "" },
+      { [toHtml]: null },
+      { [toHtml]: undefined },
+    ]) {
+      it(inspect(x), () => {
+        expect(implementsToHtml(x)).to.be.false;
+      });
+    }
   });
 });

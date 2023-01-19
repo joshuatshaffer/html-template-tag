@@ -6,6 +6,7 @@ import {
   html,
   HtmlFragment,
   HtmlInterpolation,
+  htmlTag,
   implementsToHtml,
   ToHtml,
   toHtml,
@@ -78,6 +79,35 @@ describe("html", () => {
         expect(html`${value}`.toString()).to.equal(string);
       })
     );
+  });
+});
+
+describe("htmlTag", () => {
+  it("tag with content", () => {
+    expect(htmlTag("p", {}, "test").toString()).to.equal("<p>test</p>");
+  });
+
+  it("tag with attribute and content", () => {
+    expect(
+      htmlTag(
+        "a",
+        { href: "https://example.com/?foo&bar=0" },
+        "test"
+      ).toString()
+    ).to.equal('<a href="https://example.com/?foo&amp;bar=0">test</a>');
+  });
+
+  it("self closing tag", () => {
+    expect(htmlTag("br").toString()).to.equal("<br />");
+  });
+
+  it("self closing tag with attributes", () => {
+    expect(
+      htmlTag("meta", {
+        name: "description",
+        content: "This is a webpage.",
+      }).toString()
+    ).to.equal('<meta name="description" content="This is a webpage." />');
   });
 });
 

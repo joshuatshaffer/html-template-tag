@@ -72,10 +72,10 @@ html`<p>${who} at 2am ${what}</p>`.toString();
 Objects can implement the implement their own HTML rendering logic.
 
 ```ts
-import { html, toHtml } from "simple-html-template-tag";
+import { html, toHtml, type ToHtml } from "simple-html-template-tag";
 
-class Weather {
-  constructor(public condition, public tempF) {}
+class Weather implements ToHtml {
+  constructor(public condition: string, public tempF: number) {}
 
   [toHtml]() {
     return html`<img

@@ -35,4 +35,34 @@ export namespace html {
   export function raw(content: string) {
     return new HtmlFragment(content);
   }
+
+  /**
+   * Convert an object to HTML attributes.
+   */
+  export function attrs(attributes: Record<string, HtmlInterpolation>) {
+    // TODO: Guard against invalid attribute names.
+    return html.join(
+      Object.entries(attributes).map(
+        ([name, value]) => html`${name}="${value}"`
+      ),
+      " "
+    );
+  }
+
+  /**
+   * If content is `null` or `undefined`, render a self closing tag. To render
+   * an empty element, pass empty string to content.
+   */
+  export function tag(
+    name: string,
+    attributes?: Record<string, HtmlInterpolation>,
+    content?: HtmlInterpolation
+  ) {
+    // TODO: Guard against invalid tag names.
+    return html`<${name}${
+      attributes && Object.keys(attributes).length > 0
+        ? html` ${html.attrs(attributes)}`
+        : null
+    }${content != null ? html`>${content}</${name}>` : html` />`}`;
+  }
 }

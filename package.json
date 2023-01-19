@@ -15,8 +15,8 @@
   "files": [
     "dist"
   ],
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/simple-html-template-tag.js",
+  "types": "dist/simple-html-template-tag.d.ts",
   "sideEffects": false,
   "scripts": {
     "build": "tsc --build",

@@ -1,9 +1,15 @@
 import { expect } from "chai";
 import * as fc from "fast-check";
-import { escapeHtml } from "./escape-html";
-import { HtmlInterpolation } from "./html-interpolation";
-import { html } from "./simple-html-template-tag";
-import { ToHtml, toHtml } from "./to-html";
+import { inspect } from "node:util";
+import {
+  escapeHtml,
+  html,
+  HtmlFragment,
+  HtmlInterpolation,
+  implementsToHtml,
+  ToHtml,
+  toHtml,
+} from "./simple-html-template-tag";
 
 function arbHtmlInterpolation() {
   return fc.anything() as fc.Arbitrary<HtmlInterpolation>;
@@ -72,5 +78,52 @@ describe("html", () => {
         expect(html`${value}`.toString()).to.equal(string);
       })
     );
+  });
+});
+
+describe("implementsToHtml", () => {
+  describe("returns true for", () => {
+    for (const x of [
+      { [toHtml]: () => "" },
+      {
+        [toHtml]() {
+          return "";
+        },
+      },
+      {
+        get [toHtml]() {
+          return () => "";
+        },
+      },
+      new HtmlFragment(""),
+    ]) {
+      it(inspect(x), () => {
+        expect(implementsToHtml(x)).to.be.true;
+      });
+    }
+  });
+
+  describe("returns false for", () => {
+    for (const x of [
+      null,
+      undefined,
+      Infinity,
+      NaN,
+      0,
+      1,
+      -1,
+      true,
+      false,
+      "",
+      "test",
+      [],
+      { toHtml: () => "" },
+      { [toHtml]: null },
+      { [toHtml]: undefined },
+    ]) {
+      it(inspect(x), () => {
+        expect(implementsToHtml(x)).to.be.false;
+      });
+    }
   });
 });

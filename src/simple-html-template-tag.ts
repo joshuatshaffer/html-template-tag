@@ -1,9 +1,3 @@
-import { HtmlFragment } from "./html-fragment";
-import {
-  handleHtmlInterpolation,
-  HtmlInterpolation,
-} from "./html-interpolation";
-
 /** Template literal tag for building HTML documents. */
 export function html(
   strings: TemplateStringsArray,
@@ -59,4 +53,108 @@ export function htmlTag(
       ? html` ${htmlAttrs(attributes)}`
       : null
   }${content != null ? html`>${content}</${name}>` : html` />`}`;
+}
+
+/**
+ * Replace potentially troublesome characters (`&`, `<`, `>`, `'`, `"`, and `` `
+ * ``) with their HTML character entities.
+ *
+ * Note: Always quote attribute values. Escaping works fine in attribute values,
+ * but it will not stop attribute injection if the attribute is unquoted. For
+ * example, ``html`<div foo=${'bar style=color:red}>test</div>`` produces `<div
+ * foo=bar style=color:red>test</div>`. Quoting prevents this; ``html`<div
+ * foo="${'bar" style="color:red}">test</div>`` produces `<div foo="bar&quot;
+ * style=&quot;color:red">test</div>`.
+ *
+ * Note: Escaping does not work for the content of `<script>` and `<style>`
+ * tags. The content of these tags does not use HTML character references.
+ */
+export function escapeHtml(unescaped: string): string {
+  return unescaped.replace(
+    /[&<>"'`]/g,
+    (c) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#x27;",
+        "`": "&#x60;",
+      }[c]!)
+  );
+}
+
+/**
+ * Symbol for implementing the {@link ToHtml} interface.
+ */
+export const toHtml = Symbol("toHtml");
+
+/**
+ * Defines custom HTML rendering.
+ *
+ * @example
+ * ```ts
+ * class Book implements ToHtml {
+ *   constructor (public title: string) {}
+ *
+ *   [toHtml]() {
+ *     return html`<i>${this.title}</i>`
+ *   }
+ * }
+ *
+ * html`<p>Have you read ${new Book("Alice in Wonderland")}?</p>`;
+ * ```
+ *
+ * Result:
+ * ```html
+ * <p>Have you read <i>Alice in Wonderland</i>?</p>
+ * ```
+ */
+export interface ToHtml {
+  readonly [toHtml]: () => string | HtmlFragment;
+}
+
+/**
+ * Returns `true` if `value` defines its own HTML rendering.
+ */
+export function implementsToHtml(value: unknown): value is ToHtml {
+  return typeof (value as any)?.[toHtml] === "function";
+}
+
+/**
+ * Part of an HTML document.
+ */
+export class HtmlFragment implements ToHtml {
+  constructor(private readonly content: string) {}
+
+  toString() {
+    return this.content;
+  }
+
+  [toHtml]() {
+    return this;
+  }
+}
+
+export type HtmlInterpolation =
+  | null
+  | undefined
+  | ToHtml
+  | readonly HtmlInterpolation[]
+  | { readonly toString: () => string };
+
+export function handleHtmlInterpolation(value: HtmlInterpolation): string {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  if (implementsToHtml(value)) {
+    return value[toHtml]().toString();
+  }
+
+  if (Array.isArray(value)) {
+    return value.map(handleHtmlInterpolation).join("");
+  }
+
+  return escapeHtml(value.toString());
 }

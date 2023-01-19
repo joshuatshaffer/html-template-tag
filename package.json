@@ -1,5 +1,5 @@
 {
-  "name": "@joshuatshaffer/html-template-tag",
+  "name": "simple-html-template-tag",
   "description": "Simple utility for generating safe HTML.",
   "version": "0.0.1",
   "license": "MIT",

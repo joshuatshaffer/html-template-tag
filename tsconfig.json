@@ -4,10 +4,10 @@
 
     "target": "ES6",
     "module": "CommonJS",
+    "moduleResolution": "Node",
 
     "outDir": "./dist",
     "declaration": true,
-    "declarationMap": true,
     "sourceMap": true
   },
   "include": ["src/**/*.ts"],

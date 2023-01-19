@@ -1,7 +1,3 @@
 {
-  "recommendations": [
-    "styled-components.vscode-styled-components",
-    "bierner.lit-html",
-    "esbenp.prettier-vscode"
-  ]
+  "recommendations": ["bierner.lit-html", "esbenp.prettier-vscode"]
 }

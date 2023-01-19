@@ -1,7 +1,7 @@
 import { expect } from "chai";
+import { inspect } from "node:util";
 import { HtmlFragment } from "./html-fragment";
 import { implementsToHtml, toHtml } from "./to-html";
-import { inspect } from "util";
 
 describe("implementsToHtml", () => {
   describe("returns true for", () => {

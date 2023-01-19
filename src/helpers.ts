@@ -1,7 +1,7 @@
 import { HtmlFragment } from "./html-fragment";
 import {
-  HtmlInterpolation,
   handleHtmlInterpolation,
+  HtmlInterpolation,
 } from "./html-interpolation";
 
 /** Like {@link Array.join}, but with {@link HtmlFragment}s instead of strings. */

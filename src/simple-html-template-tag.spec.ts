@@ -109,6 +109,12 @@ describe("htmlTag", () => {
       }).toString()
     ).to.equal('<meta name="description" content="This is a webpage." />');
   });
+
+  it("does not render nullish attributes", () => {
+    expect(
+      htmlTag("a", { foo: null, bar: undefined }, "test").toString()
+    ).to.equal("<a>test</a>");
+  });
 });
 
 describe("implementsToHtml", () => {
